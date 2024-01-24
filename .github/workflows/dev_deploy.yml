@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ['18.x']  # 노드 버전 지정! 여러 개도 가능! ['18.x', '14.x'] 요렇게
+        node-version: ['18.x', '20.x']  # 노드 버전 지정! 여러 개도 가능! ['18.x', '14.x'] 요렇게
         
     steps:
       # build 할 코드를 가져옴 (코드 checkout - github에서 제공해주는 checkout@v3 사용)
@@ -47,6 +47,7 @@ jobs:
           cp package.json dist/package.json
           cp package-lock.json dist/package-lock.json
           cp Procfile dist/Procfile
+          cp -r .ebextensions_dev deploy/.ebextensions
           cd dist
           zip -r deploy.zip .
       
@@ -73,8 +74,8 @@ jobs:
         with:
           aws_access_key: ${{secrets.AWS_ACTION_ACCESS_KEY_ID}}
           aws_secret_key: ${{secrets.AWS_ACTION_SECRET_ACCESS_KEY}}
-          application_name: test8-dev
-          environment_name: Test8-dev-env
+          application_name: PacketProject-dev
+          environment_name: PacketProject-dev-env 
           version_label: github-action-${{ steps.current-time.outputs.formattedTime }}  # version_label은 이전에 배포한 label과 중복되면 안됨!
           use_existing_version_if_available: true
           region: ap-northeast-2
